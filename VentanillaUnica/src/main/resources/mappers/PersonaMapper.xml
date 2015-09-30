@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mx.gob.sct.dgaf.services.dao.IPersonaDao">
+	<resultMap id="personaMap" type="mx.gob.sct.dgaf.model.TPersona">
+		<id column="IDPERSONA" property="idPersona" />
+		<result column="NOMBRE" property="nombre" />
+		<result column="APPATERNO" property="apPaterno" />
+		<result column="APMATERNO" property="apMaterno" />
+		<result column="CURP" property="curp" />
+		<result column="RFC" property="rfc" />
+		<result column="EMAIL" property="email" />
+		<result column="RAZONSOCIAL" property="razonSocial" />
+		<result column="IDTIPOPERSONA" property="idTipoPersona" />
+		<result column="PERSONAASOCIADA" property="personaAsociada" />
+		<result column="ESTATUSTRAMITE" property="estatusTramite" />
+		<result column="FECHAREGISTRO" property="fechaRegistro" />
+		<result column="FECHAACTUALIZA" property="fechaActualiza" />
+
+	</resultMap>
+
+	<select id="getPersonaById" resultMap="personaMap"
+		parameterType="Long">
+		SELECT
+		IDPERSONA,NOMBRE,APPATERNO,APMATERNO,CURP,RFC,EMAIL,IDTIPOPERSONA,PERSONAASOCIADA,ESTATUSTRAMITE
+		FROM ESIAF.VUPERSONA WHERE IDPERSONA = #{idPersona}
+	</select>
+
+	<select id="getPersonasByPersonaAsociada" resultMap="personaMap"
+		parameterType="Long">
+		SELECT
+		IDPERSONA,NOMBRE,APPATERNO,APMATERNO,CURP,RFC,EMAIL,IDTIPOPERSONA,PERSONAASOCIADA,ESTATUSTRAMITE,FECHAREGISTRO,FECHAACTUALIZA
+		FROM ESIAF.VUPERSONA WHERE PERSONAASOCIADA = #{personaAsociada}
+	</select>
+
+
+
+	<insert id="insertaPersona" parameterType="mx.gob.sct.dgaf.model.TPersona"
+		useGeneratedKeys="true" keyProperty="idPersona">
+		INSERT INTO ESIAF.VUPERSONA (NOMBRE, APPATERNO, APMATERNO, CURP, RFC,
+		EMAIL,RAZONSOCIAL, IDTIPOPERSONA,PERSONAASOCIADA,ESTATUSTRAMITE,FECHAREGISTRO)
+		VALUES(#{nombre},#{apPaterno},#{apMaterno},#{curp},#{rfc},#{email},#{razonSocial},#{idTipoPersona},#{personaAsociada},#{estatusTramite},#{fechaRegistro})
+		<!-- <selectKey keyProperty="IDPERSONA" resultType="long" order="AFTER"> -->
+		<!-- SELECT LAST_INSERT_IDPERSONA(); -->
+		<!-- </selectKey> -->
+	</insert>
+
+	<update id='updatePersonaAsociada' parameterType="mx.gob.sct.dgaf.model.TPersona">
+		UPDATE ESIAF.VUPERSONA	SET	IDTIPOPERSONA= #{idTipoPersona},ESTATUSTRAMITE = #{estatusTramite},FECHAACTUALIZA=#{fechaActualiza} 
+		WHERE IDPERSONA = #{idPersona}
+	</update>
+		
+	<update id="updateEstatusByRFC">
+ 		UPDATE ESIAF.VUPERSONA
+    	SET ESTATUSTRAMITE = 2
+	    WHERE RFC = #{rfc} AND ESTATUSTRAMITE = 1
+	</update>
+	
+	<select id="getConfirmDatesByRFC" resultMap="personaMap"
+		parameterType="java.util.Map">
+		SELECT CURRENT DATE AS FECHAACTUALIZA, FECHAREGISTRO
+		FROM ESIAF.VUPERSONA WHERE RFC=#{rfc}
+	</select>
+	
+	
+	<select id="getPersonaPorRC" resultMap="personaMap"
+		parameterType="java.util.Map" >
+		SELECT 
+		IDPERSONA,NOMBRE,APPATERNO,APMATERNO,CURP,RFC,EMAIL,RAZONSOCIAL,IDTIPOPERSONA,PERSONAASOCIADA,ESTATUSTRAMITE,FECHAREGISTRO,FECHAACTUALIZA
+        FROM ESIAF.VUPERSONA WHERE 1=1 AND RFC=#{rfc} AND CURP=#{curp}
+	</select>
+
+</mapper>

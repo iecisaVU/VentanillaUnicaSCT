@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-/mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+    	<setting name="logImpl" value="LOG4J"/>
+    </settings>
+	<typeAliases>
+		<typeAlias type="mx.gob.sct.dgaf.model.VUParametrosGenerales" alias="parametros"/>
+		<typeAlias type="mx.gob.sct.dgaf.model.TCatTipoPersona" alias="tipoPersona"/>
+		<typeAlias type="mx.gob.sct.dgaf.model.TPersona" alias="persona"/>
+		<typeAlias type="mx.gob.sct.dgaf.model.VUDeptoTramite" alias="deptoTram"/>
+		<typeAlias type="mx.gob.sct.dgaf.model.VUTramite" alias="tramite"/>
+		<typeAlias type="mx.gob.sct.dgaf.model.VUSolicitud" alias="solicitud"/>
+		<typeAlias type="mx.gob.sct.dgaf.model.VUEstadoSol" alias="estSol"/>
+		<typeAlias type="mx.gob.sct.dgaf.model.TCatalogos" alias="tCatalogos"/>
+		<typeAlias type="mx.gob.sct.dgaf.model.TPerDatosPersona" alias="tPerDatos"/>
+	</typeAliases>
+	<typeHandlers>
+    	<typeHandler handler="mx.gob.sct.dgaf.handler.BooleanTypeHandler" javaType="Boolean" />
+    	<typeHandler handler="mx.gob.sct.dgaf.handler.BooleanNumTypeHandler" javaType="Boolean"/>
+    </typeHandlers>	
+    <mappers>
+        <mapper resource="mappers/ParametrosGeneralesMapper.xml" />  
+        <mapper resource="mappers/CatTipoPersonaMapper.xml" />  
+        <mapper resource="mappers/PersonaMapper.xml" />    
+        <mapper resource="mappers/SolicitudMapper.xml" />
+        <mapper resource="mappers/EstatusTramiteMapper.xml" />
+         <mapper resource="mappers/CatalogosMapper.xml" />
+         <mapper resource="mappers/DatosPersonaMapper.xml" />             
+    </mappers>
+</configuration>

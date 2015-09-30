@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mx.gob.sct.dgaf.services.dao.ITramiteDao">
+	<resultMap id="deptoMap" type="mx.gob.sct.dgaf.model.VUDeptoTramite">
+		<id column="IDEPTOTRAM" property="idDeptoTram" />
+		<result column="CDESCDEPTOTRAM" property="descDeptoTram" />
+		<result column="CCVEDEPTRAM" property="cveDeptoTram" />
+		<result column="CACTIVO" property="activo" javaType="java.lang.Boolean" jdbcType="VARCHAR" typeHandler="mx.gob.sct.dgaf.handler.BooleanTypeHandler"/>
+		<collection property="tramites" ofType="mx.gob.sct.dgaf.model.VUTramite" >
+			<id column="ITRAMITE" property="idTramite" />
+			<result column="CDESCTRAMITE" property="descTram" />
+		</collection>
+	</resultMap>
+	<resultMap id="solicMap" type="mx.gob.sct.dgaf.model.VUSolicitud">
+		<id column="ISOLICITUD" property="idSolicitud" />
+		<result column="CRFC" property="userRFC" />
+		<result column="ITRAMITE" property="idTramite" />
+		<result column="CFOLIO" property="folio" />
+		<result column="ICONSECUTIVO" property="consecutivo" />
+		<result column="IESTADOSOL" property="idEstado" />
+		<result column="TSREGISTRO" property="fechaReg" />
+		<result column="TSFINSOLICITUD" property="fechaFinSol" />
+		<result column="CACTIVO" property="activo" javaType="java.lang.Boolean" jdbcType="VARCHAR" typeHandler="mx.gob.sct.dgaf.handler.BooleanTypeHandler"/>
+		<result column="ICONCLUIDO" property="concluido" javaType="java.lang.Boolean" jdbcType="INTEGER" typeHandler="mx.gob.sct.dgaf.handler.BooleanTypeHandler"/>
+		<association property="tramite" column="ITRAMITE" javaType="mx.gob.sct.dgaf.model.VUTramite" select="getTramite" />
+		<association property="estSol" column="IESTADOSOL" javaType="mx.gob.sct.dgaf.model.VUEstadoSol" select="getEstatus" />  
+	</resultMap>
+	<resultMap id="tramMap" type="mx.gob.sct.dgaf.model.VUTramite">
+		<id column="ITRAMITE" property="idTramite" />
+		<result column="IDEPTOTRAM" property="idDeptoTram" />
+		<result column="CCVETRAMITE" property="cveTram" />
+		<result column="CDESCTRAMITE" property="descTram" />
+		<result column="CDESCDEPTOTRAM" property="descDeptoTram" />
+		<result column="CACTIVO" property="activo" javaType="java.lang.Boolean" jdbcType="VARCHAR" typeHandler="mx.gob.sct.dgaf.handler.BooleanTypeHandler"/>
+	</resultMap>
+	<resultMap id="estatusMap" type="mx.gob.sct.dgaf.model.VUEstadoSol">
+		<id column="IESTADOSOL" property="idEstSol" />
+		<result column="CCVEESTADO" property="cveEstSol" />
+		<result column="CDESCESTADO" property="descEst" />
+		<result column="CACTIVO" property="activo" javaType="java.lang.Boolean" jdbcType="VARCHAR" typeHandler="mx.gob.sct.dgaf.handler.BooleanTypeHandler"/>
+	</resultMap>
+	<resultMap id="detSolMap" type="mx.gob.sct.dgaf.model.VUDetalleSol">
+		<id column="IDETALLESOL" property="idDetSol" />
+		<result column="ISOLICITUD" property="idSolicitud" />
+		<result column="TSDETALLE" property="fecDet" />
+		<result column="CDETALLE" property="detalle" />
+		<result column="cfolio" property="folio" />
+		<result column="CACTIVO" property="activo" javaType="java.lang.Boolean" jdbcType="VARCHAR" typeHandler="mx.gob.sct.dgaf.handler.BooleanTypeHandler"/>
+	</resultMap>
+	<resultMap id="notSolMap" type="mx.gob.sct.dgaf.model.VUNotifSol">
+		<id column="INOTSOL" property="idNotSol" />
+		<result column="ISOLICITUD" property="idSol" />
+		<result column="TSNOTIFICA" property="fecNot" />
+		<result column="CNOTIFICACION" property="notificacion" />
+		<result column="cfolio" property="folio" />
+		<result column="CACTIVO" property="activo" javaType="java.lang.Boolean" jdbcType="VARCHAR" typeHandler="mx.gob.sct.dgaf.handler.BooleanTypeHandler"/>
+	</resultMap>
+	<resultMap id="perSolMap" type="mx.gob.sct.dgaf.model.TSolPersona">
+		<id column="IDPERSONA" property="idPersona" />
+		<result column="NOMBRE" property="nombre" />
+		<result column="APPATERNO" property="apPaterno" />
+		<result column="APMATERNO" property="apMaterno" />
+		<result column="RFC" property="rfc" />
+		<collection property="listNot" ofType="mx.gob.sct.dgaf.model.VUNotifSol" column="RFC" select="getNotSol" fetchType="eager"  />
+	</resultMap>
+	
+	
+	<select id="getTramites" resultMap="deptoMap">
+		select deptotram.IDEPTOTRAM, deptotram.CDESCDEPTOTRAM , tramite.ITRAMITE, tramite.CDESCTRAMITE
+		from ESIAF.VUDEPTOTRAM deptotram
+		left join ESIAF.VUTRAMITE tramite on tramite.IDEPTOTRAM = deptotram.IDEPTOTRAM
+		where deptotram.CACTIVO = 'Y'
+		and tramite.CACTIVO = 'Y' 
+	</select>
+	<select id="getSolAct" resultMap="solicMap">
+		select * from  ESIAF.VUSOLICITUD 
+		where CRFC = #{userRFC}
+		AND IESTADOSOL NOT IN (12)
+		AND CACTIVO = 'Y'
+		AND ICONCLUIDO = 'N'
+	</select>
+	<select id="getTramite" resultMap="tramMap">
+		select tramite.*,  depto.CDESCDEPTOTRAM 
+		from  ESIAF.VUTRAMITE tramite
+		join ESIAF.VUDEPTOTRAM  depto on depto.IDEPTOTRAM = tramite.IDEPTOTRAM 
+		where tramite.ITRAMITE = #{idTramite}
+	</select>
+	<select id="getSolFin" resultMap="solicMap">
+		select * from  ESIAF.VUSOLICITUD 
+		where CRFC = #{userRFC}
+		AND IESTADOSOL IN (12)
+		AND CACTIVO = 'Y'
+		AND ICONCLUIDO = 'Y'
+	</select>
+	<select id="getEstatus" resultMap="estatusMap">
+		select * from  ESIAF.VUESTADOSOL 
+		where IESTADOSOL = #{idEstSol}
+	</select>
+	<select id="getDetSol" resultMap="detSolMap" >
+		select detalle.* ,  solicitud.cfolio
+		from ESIAF.VUDETALLESOL detalle
+		join ESIAF.VUSOLICITUD  solicitud on solicitud.ISOLICITUD = detalle.ISOLICITUD
+		where detalle.ISOLICITUD = #{idSolicitud}
+		AND detalle.CACTIVO = 'Y' 
+	</select>
+	<select id="getSolPersona" resultMap="perSolMap" >
+		select * 
+from ESIAF.VUPERSONA persona  
+WHERE persona.RFC = #{userRFC}
+	</select>
+	<select id="getNotSol" resultMap="notSolMap" >
+		select notifi.*, solicitud.cfolio 
+from ESIAF.VUNOTIFSOL notifi 
+join ESIAF.VUSOLICITUD solicitud on ( solicitud.ISOLICITUD = notifi.ISOLICITUD 
+AND solicitud.CRFC = #{userRFC}
+AND solicitud.CACTIVO = 'Y' )
+where notifi.CACTIVO = 'Y'
+	</select>
+	<select id="getNotNum" resultType="java.lang.Integer" >
+		select distinct count(notifi.ISOLICITUD) 
+from ESIAF.VUNOTIFSOL notifi 
+join ESIAF.VUSOLICITUD solicitud on ( solicitud.ISOLICITUD = notifi.ISOLICITUD 
+AND solicitud.CRFC = #{userRFC}
+AND solicitud.CACTIVO = 'Y' )
+where notifi.CACTIVO = 'Y'
+	</select>
+	
+	<insert id="insertSolic" parameterType="mx.gob.sct.dgaf.model.VUSolicitud"
+		useGeneratedKeys="true" keyProperty="idSolicitud">
+		INSERT INTO ESIAF.VUSOLICITUD (CRFC, ITRAMITE, CFOLIO, ICONSECUTIVO, IESTADOSOL, TSREGISTRO,ICONCLUIDO, CACTIVO)
+		VALUES(#{userRFC},#{idTramite},#{folio},#{consecutivo},#{idEstado},#{fechaReg}, 'N','Y')
+	</insert>
+	
+	<insert id="insertDetSolic" parameterType="mx.gob.sct.dgaf.model.VUDetalleSol"
+		useGeneratedKeys="true" keyProperty="idDetSol">
+		INSERT INTO ESIAF.VUDETALLESOL (ISOLICITUD, TSDETALLE, CDETALLE, CACTIVO)
+		VALUES(#{idSolicitud},#{fecDet},#{detalle},'Y')
+	</insert>
+</mapper>

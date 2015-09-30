@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mx.gob.sct.dgaf.services.dao.IPersonaMedPrevenDao">
+	<resultMap id="datosPersonaMap" type="mx.gob.sct.dgaf.model.TPerDatosPersona">
+		<id column="ICVEPERSONAL" property="icvePersonal" />
+		<result column="CNOMBRE" property="cNombre" />
+		<result column="CAPPATERNO" property="capPaterno" />
+		<result column="CAPMATERNO" property="capMaterno" />
+		<result column="CRFC" property="cRfc" />		
+		<result column="CHOMOCLAVE" property="cHomoClave" />
+		<result column="CCURP" property="cCurp" />
+	</resultMap>
+
+	<select id="getDatosPersonaByCurp" resultMap="datosPersonaMap"
+		parameterType="String">
+		SELECT ICVEPERSONAL,CNOMBRE,CAPPATERNO,CAPMATERNO,CRFC,CHOMOCLAVE,CCURP
+ 		FROM PERDATOS WHERE CCURP=#{curp}
+	</select>
+
+	
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mx.gob.sct.dgaf.services.dao.ICatalogosDao">
+	
+    <resultMap id="catalogosMap" type="java.lang.Long" >
+		<result property="" column="INDICE" />
+	</resultMap>
+	
+	<select id="getSecuenciaInodocto" resultMap="catalogosMap" >
+		select INDICE from SECUENCIAS
+        WHERE 1=1 AND TABLA='INODOCTO'
+	</select>
+	
+	<update id="getActSecuenciaInodocto" >
+		update SECUENCIAS set INDICE = INDICE+1 where TABLA = 'INODOCTO'
+	</update>
+
+</mapper>

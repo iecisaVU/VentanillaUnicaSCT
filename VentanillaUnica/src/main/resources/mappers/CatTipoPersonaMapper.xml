@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mx.gob.sct.dgaf.services.dao.ICatTipoPersonaDao">
+	<resultMap id="tipoPersonaMap" type="mx.gob.sct.dgaf.model.TCatTipoPersona">
+		<id column="IDTIPOPERSONA" property="idCatTipoPersona" />
+		<result column="DESCRIPCION" property="descripcion" />
+		<result column="ESTATUS" property="estatus" />
+	</resultMap>
+	<select id="getTipoPersona" resultMap="tipoPersonaMap"
+		parameterType="Long">
+		SELECT * FROM  ESIAF.VUCATTIPOPERSONA 
+	</select>	
+</mapper>

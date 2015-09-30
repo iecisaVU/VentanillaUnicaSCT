@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+  <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{yyMMdd HH:mm:ss,SSS} %5p %c{1}:%L - %m%n"/>
+    </layout>
+  </appender>
+  <category name="org.springframework.security.web">
+    <priority value="info"/>
+  </category>
+  <category name="com.opensymphony.xwork2.ognl.OgnlValueStack">
+    <priority value="error"/>
+  </category>
+  <category name="org.springframework.beans.factory.xml.XmlBeanFactory">
+    <priority value="error"/>
+  </category>
+  <category name="org.apache.struts2.util.TextProviderHelper">
+    <priority value="error"/>
+  </category>
+  <category name="org.springframework.security">
+    <priority value="info"/>
+  </category>
+  <category name="org.springframework.jdbc.core">
+    <priority value="debug"/>
+  </category>
+  <category name="org.springframework.jdbc.datasource">
+    <priority value="debug"/>
+  </category>
+  <category name="mx.gob.sct.dgaf">
+    <priority value="debug"/>
+  </category>
+  <category name="com.ibatis">
+    <priority value="debug"/>
+  </category>
+  
+  <root>
+  <priority value="${logger.lever.root}"/>
+    <appender-ref ref="ConsoleAppender"/>
+  </root>
+</log4j:configuration>

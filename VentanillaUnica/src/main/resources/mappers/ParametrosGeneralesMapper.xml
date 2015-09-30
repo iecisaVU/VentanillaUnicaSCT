@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mx.gob.sct.dgaf.services.dao.IParametroGeneralDao">
+	<resultMap id="parametrosMap" type="mx.gob.sct.dgaf.model.VUParametrosGenerales">
+		<id column="IDPARAMETRO" property="idParametro" />
+		<result column="CLAVE" property="clave" />
+		<result column="VALOR" property="valor" />
+	</resultMap>
+
+	<select id="getParametroByClave" parameterType="String" resultMap="parametrosMap">
+		SELECT IDPARAMETRO,CLAVE,VALOR FROM ESIAF.VUPARAMETROSGENERALES  WHERE CLAVE = #{clave}
+	</select>
+
+		<select id="getParametros" resultMap="parametrosMap">
+		SELECT IDPARAMETRO,CLAVE,VALOR  FROM ESIAF.VUPARAMETROSGENERALES 
+	</select>
+</mapper>
